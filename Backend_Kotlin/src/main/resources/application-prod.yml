@@ -1,0 +1,46 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: false
+
+# =======================================
+# Logging Configuration
+# =======================================
+logging:
+  level:
+    root: INFO
+    com.back: INFO
+
+# =======================================
+# Swagger (OpenAPI) Configuration
+# =======================================
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+# =======================================
+# Custom Properties from Environment Variables
+# =======================================
+custom:
+  jwt:
+    # [중요] JWT 시크릿 키는 반드시 환경 변수로 주입해야 합니다.
+    secretKey: ${JWT_SECRET_KEY}
+  accessToken:
+    expirationSeconds: 1200 # 20분
+
+app:
+  frontend:
+    # 프로덕션 환경의 실제 프론트엔드 URL을 환경 변수로 설정합니다.
+    base-url: ${FRONTEND_BASE_URL}

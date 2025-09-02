@@ -3,8 +3,6 @@ spring:
     name: back
   profiles:
     active: dev
-  config:
-    import: classpath:application-secret.yml
   servlet:
     multipart:
       max-file-size: 10MB
