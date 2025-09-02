@@ -10,10 +10,10 @@ WORKDIR /workspace/app
 # 소스 코드와 Gradle 래퍼 복사
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
-COPY gradle gradle
 COPY gradlew .
+COPY gradle gradle
 
-# Gradle 실행 권한 부여
+# radlew 스크립트에 실행 권한 부여
 RUN chmod +x ./gradlew
 
 # Gradle 종속성을 먼저 다운로드
@@ -22,20 +22,22 @@ RUN ./gradlew dependencies --no-daemon
 # 소스 코드 복사
 COPY src src
 
-# Gradle을 사용하여 애플리케이션을 빌드 (테스트는 생략)
-RUN ./gradlew bootJar --no-daemon -x test
-
+# 애플리케이션 빌드
+RUN ./gradlew build --no-daemon -x test
 
 # ========================
 # 2. Runtime Stage
 # ========================
-FROM container-registry.oracle.com/graalvm/jdk:21
+FROM eclipse-temurin:21-jre-jammy
 
 # 작업 디렉토리 설정
 WORKDIR /app
 
 # 첫 번째 스테이지에서 빌드된 JAR 파일 복사
 COPY --from=builder /workspace/app/build/libs/*.jar app.jar
+
+# 포트 설정 (Spring Boot 기본 8080)
+EXPOSE 8080
 
 # 실행할 JAR 파일 지정
 ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
